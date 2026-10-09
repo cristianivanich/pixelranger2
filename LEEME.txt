@@ -1,0 +1,18 @@
+PIXEL RANGER - PAGINA WEB
+=========================
+Contenido: index.html (la pagina), fondo.jpg (el fondo, se puede cambiar por otra
+imagen con el mismo nombre), juego/pixelranger.swf (el juego), ruffle/ (el emulador).
+
+PROBAR EN TU PC
+ Ruffle necesita un servidor, no anda abriendo index.html con doble clic.
+ Si tenes Python: abri una consola en esta carpeta y escribi:  python -m http.server 8000
+ y despues entra a http://localhost:8000
+
+PUBLICARLA GRATIS
+ - Cloudflare Pages: pages.cloudflare.com > Upload assets > arrastra esta carpeta.
+ - GitHub Pages: subi la carpeta a un repositorio y activa Pages en Settings.
+
+NOTAS
+ - El ranking se guarda en el navegador de cada persona (todavia no es compartido).
+ - La tipografia ambar (VT323) se baja de Google Fonts; sin internet usa otra parecida.
+ - Sin publicidad ni boton de donar por ahora.

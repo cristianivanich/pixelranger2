@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pixel Ranger</title>
+<meta name="description" content="Pixel Ranger: disparale a todo y entrá al top 10.">
+<meta property="og:title" content="Pixel Ranger">
+<meta property="og:description" content="¿Podés entrar al top 10?">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cristianivanich.github.io/pixelranger2/">
+<meta property="og:image" content="https://cristianivanich.github.io/pixelranger2/card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@de_carazaa">
+<meta name="twitter:creator" content="@de_carazaa">
+<meta name="twitter:title" content="Pixel Ranger">
+<meta name="twitter:description" content="¿Podés entrar al top 10?">
+<meta name="twitter:image" content="https://cristianivanich.github.io/pixelranger2/card.jpg">
+<link rel="icon" type="image/png" href="icono.png">
+<link rel="apple-touch-icon" href="icono.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ambar: #ffb000;
+    --ambar-claro: #ffd36b;
+    --ambar-oscuro: #8a5a00;
+    --glow: 0 0 4px rgba(255, 176, 0, .9), 0 0 12px rgba(255, 140, 0, .55);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    min-height: 100vh;
+    background: #07060d url("fondo.jpg") center center / cover fixed no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 16px;
+    font-family: "VT323", "Lucida Console", "Courier New", monospace;
+    color: var(--ambar);
+  }
+  /* velo oscuro para que se lea todo sobre la foto */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    background: linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.6));
+    pointer-events: none;
+  }
+  main {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 625px) 300px;
+    gap: 26px;
+    align-items: start;
+    width: 100%;
+    max-width: 951px;
+  }
+
+  /* ---------- juego ---------- */
+  .marco {
+    background: #000;
+    border: 3px solid #14141c;
+    box-shadow: 0 0 0 1px #3a3a4a, 0 10px 40px rgba(0,0,0,.7), 0 0 60px rgba(90,70,200,.25);
+    aspect-ratio: 625 / 510;
+    width: 100%;
+  }
+  #juego, #juego ruffle-player { display: block; width: 100%; height: 100%; }
+
+  /* ---------- ranking: pantalla de tubo ambar ---------- */
+  .tubo {
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 40%, #241702 0%, #120b01 60%, #080500 100%);
+    border: 8px solid #17130c;
+    border-radius: 18px;
+    box-shadow:
+      inset 0 0 40px rgba(0,0,0,.9),
+      inset 0 0 90px rgba(255,150,0,.10),
+      0 10px 40px rgba(0,0,0,.7),
+      0 0 0 1px #3b3123;
+    padding: 16px 14px 14px;
+    overflow: hidden;
+    text-shadow: var(--glow);
+    font-size: 24px;
+    line-height: 1.15;
+  }
+  /* lineas de barrido y viñeta */
+  .tubo::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(to bottom, rgba(0,0,0,.28) 0, rgba(0,0,0,.28) 1px, transparent 1px, transparent 3px),
+      radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.55) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .tubo > * { position: relative; z-index: 1; }
+  @media (prefers-reduced-motion: no-preference) {
+    .tubo { animation: parpadeo 6s infinite steps(1); }
+    @keyframes parpadeo {
+      0%, 100% { filter: brightness(1); }
+      47% { filter: brightness(1); }
+      48% { filter: brightness(1.12); }
+      49% { filter: brightness(.96); }
+      50% { filter: brightness(1); }
+    }
+  }
+  .tubo h2 {
+    margin: 0 0 2px;
+    text-align: center;
+    font-weight: normal;
+    font-size: 40px;
+    letter-spacing: .18em;
+    color: var(--ambar-claro);
+  }
+  .tubo .sub {
+    text-align: center;
+    color: var(--ambar-oscuro);
+    text-shadow: none;
+    margin-bottom: 8px;
+    letter-spacing: .1em;
+    font-size: 20px;
+  }
+  .tubo ol { list-style: none; margin: 0; padding: 0; }
+  .tubo li {
+    display: grid;
+    grid-template-columns: 30px 24px 1fr auto;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 2px;
+    border-bottom: 1px dotted rgba(255,176,0,.22);
+    min-height: 32px;
+  }
+  .tubo li.vacio { color: var(--ambar-oscuro); text-shadow: none; }
+  .tubo .pos { text-align: right; color: var(--ambar-claro); }
+  .tubo .nombre { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tubo .puntos { text-align: right; color: var(--ambar-claro); }
+  .tubo .foto {
+    width: 22px; height: 22px;
+    background: rgba(255,176,0,.15);
+    border: 1px solid rgba(255,176,0,.55);
+    display: block;
+    object-fit: cover;
+    /* foto en monocromo ambar, como si saliera del mismo tubo */
+    filter: grayscale(1) sepia(1) saturate(3.2) hue-rotate(-12deg) brightness(.95) contrast(1.05);
+  }
+  .tubo .inicial {
+    width: 22px; height: 22px;
+    border: 1px solid rgba(255,176,0,.55);
+    background: rgba(255,176,0,.15);
+    display: grid; place-items: center;
+    font-size: 18px;
+    text-shadow: none;
+    color: var(--ambar-claro);
+  }
+  .tubo .pie {
+    margin-top: 10px;
+    text-align: center;
+    color: var(--ambar-oscuro);
+    text-shadow: none;
+    font-size: 20px;
+    letter-spacing: .08em;
+  }
+  .tubo .cursor { display: inline-block; width: .55em; height: 1em; background: var(--ambar); vertical-align: -2px; margin-left: 4px; box-shadow: var(--glow); animation: cursor 1s steps(1) infinite; }
+  @keyframes cursor { 50% { opacity: 0; } }
+
+  /* ---------- celular / pantallas angostas ---------- */
+  @media (max-width: 960px) {
+    body { align-items: flex-start; }
+    main { grid-template-columns: minmax(0, 625px); justify-content: center; max-width: 625px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <section class="marco" aria-label="Juego">
+    <div id="juego"></div>
+  </section>
+
+  <aside class="tubo" aria-label="Ranking">
+    <h2>TOP 10</h2>
+    <div class="sub">PIXEL RANGER</div>
+    <ol id="ranking"></ol>
+    <div class="pie">&gt; JUGÁ PARA ENTRAR<span class="cursor"></span></div>
+  </aside>
+</main>
+
+<script src="ruffle/ruffle.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  /* ============ RANKING ============
+     Por ahora se guarda en el navegador de cada persona (localStorage).
+     El juego avisa a esta página cada vez que alguien guarda su @ llamando a
+     window.pxrNuevoPuntaje(usuario, puntos). Cuando haya un servidor para el
+     ranking compartido, solo hay que cambiar leerLista() y guardarLista(). */
+  var CLAVE = "pxr_top10_v1";
+  var BASE_FOTOS = "https://unavatar.io/twitter/";
+
+  function leerLista() {
+    try {
+      var l = JSON.parse(localStorage.getItem(CLAVE));
+      return Array.isArray(l) ? l : [];
+    } catch (e) { return []; }
+  }
+  function guardarLista(l) {
+    try { localStorage.setItem(CLAVE, JSON.stringify(l)); } catch (e) {}
+  }
+  function formatear(n) {
+    return String(Math.floor(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  function dibujar() {
+    var ol = document.getElementById("ranking");
+    var lista = leerLista();
+    ol.textContent = "";
+    for (var i = 0; i < 10; i++) {
+      var li = document.createElement("li");
+      var pos = document.createElement("span");
+      pos.className = "pos";
+      pos.textContent = (i + 1) + ".";
+      li.appendChild(pos);
+      if (i < lista.length) {
+        var usuario = String(lista[i].n);
+        var cuadro = document.createElement("span");
+        cuadro.className = "inicial";
+        cuadro.textContent = usuario.charAt(0).toUpperCase();
+        li.appendChild(cuadro);
+        var img = new Image();
+        img.className = "foto";
+        img.alt = "";
+        img.referrerPolicy = "no-referrer";
+        img.onload = (function (c, im) { return function () { c.replaceWith(im); }; })(cuadro, img);
+        img.src = BASE_FOTOS + encodeURIComponent(usuario);
+        var nombre = document.createElement("span");
+        nombre.className = "nombre";
+        nombre.textContent = "@" + usuario;
+        li.appendChild(nombre);
+        var pts = document.createElement("span");
+        pts.className = "puntos";
+        pts.textContent = formatear(lista[i].s);
+        li.appendChild(pts);
+      } else {
+        li.className = "vacio";
+        li.appendChild(document.createElement("span"));
+        var guiones = document.createElement("span");
+        guiones.textContent = "---";
+        li.appendChild(guiones);
+        li.appendChild(document.createElement("span"));
+      }
+      ol.appendChild(li);
+    }
+  }
+
+  /* El juego llama a esta funcion al guardar un puntaje */
+  window.pxrNuevoPuntaje = function (usuario, puntos) {
+    usuario = String(usuario || "").replace(/[^A-Za-z0-9_]/g, "").slice(0, 15);
+    puntos = Number(puntos);
+    if (!usuario || !(puntos > 0)) { return; }
+    var lista = leerLista();
+    var encontrado = false;
+    for (var i = 0; i < lista.length; i++) {
+      if (String(lista[i].n).toLowerCase() === usuario.toLowerCase()) {
+        encontrado = true;
+        if (puntos > Number(lista[i].s)) { lista[i].s = puntos; }
+      }
+    }
+    if (!encontrado) { lista.push({ n: usuario, s: puntos }); }
+    lista.sort(function (a, b) { return b.s - a.s; });
+    guardarLista(lista.slice(0, 10));
+    dibujar();
+  };
+
+  dibujar();
+  /* si se juega en otra pestaña, se actualiza solo */
+  window.addEventListener("storage", function (e) { if (e.key === CLAVE) { dibujar(); } });
+
+  /* ============ JUEGO (Ruffle) ============ */
+  window.addEventListener("load", function () {
+    var ruffle = window.RufflePlayer && window.RufflePlayer.newest();
+    if (!ruffle) { return; }
+    var jugador = ruffle.createPlayer();
+    document.getElementById("juego").appendChild(jugador);
+    jugador.load({
+      url: "juego/pixelranger.swf",
+      allowScriptAccess: true,   /* necesario para que el juego avise el puntaje a la pagina */
+      quality: "medium",         /* mas liviano para equipos flojos */
+      scale: "showAll",
+      letterbox: "on",
+      contextMenu: "off",
+      unmuteOverlay: "visible",
+      autoplay: "on"
+    });
+  });
+})();
+</script>
+</body>
+</html>
